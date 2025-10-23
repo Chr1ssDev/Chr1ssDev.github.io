@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notificaciones MPA</title>
+    <style>
+        .campana {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2d5a3d;
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+        }
+        
+        .contador {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: red;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .panel {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            width: 250px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 1000;
+        }
+        
+        .header {
+            background: #2d5a3d;
+            color: white;
+            padding: 12px 15px;
+            border-radius: 10px 10px 0 0;
+            font-weight: bold;
+        }
+        
+        .notif {
+            padding: 10px 15px;
+            border-bottom: 1px solid #eee;
+            font-size: 0.9rem;
+        }
+        
+        .notif:last-child {
+            border-bottom: none;
+        }
+        
+        .anuncio {
+            color: #8a2be2;
+            font-weight: bold;
+        }
+        
+        .aviso {
+            color: #e67e22;
+            font-weight: bold;
+        }
+        
+        .btn {
+            background: #2d5a3d;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+            font-size: 0.8rem;
+        }
+        
+        @media (max-width: 480px) {
+            .panel {
+                width: 200px;
+                right: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="campana" onclick="togglePanel()">
+        🔔
+        <div class="contador" id="contador">0</div>
+    </div>
+    
+    <div class="panel" id="panel">
+        <div class="header">Notificaciones MPA</div>
+        <div id="lista">
+            <div class="notif anuncio">📢 Anuncio MPA</div>
+            <div class="notif aviso">⚠️ Aviso MPA</div>
+        </div>
+        <button class="btn" onclick="limpiar()">Marcar leídas</button>
+    </div>
+
+    <script>
+        let contador = 2;
+        
+        function togglePanel() {
+            const panel = document.getElementById('panel');
+            panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+        }
+        
+        function limpiar() {
+            document.getElementById('lista').innerHTML = '<div class="notif" style="color:#999;">Sin notificaciones</div>';
+            contador = 0;
+            actualizarContador();
+        }
+        
+        function actualizarContador() {
+            const cont = document.getElementById('contador');
+            cont.textContent = contador;
+            cont.style.display = contador > 0 ? 'flex' : 'none';
+        }
+        
+        function agregarAnuncio() {
+            const lista = document.getElementById('lista');
+            const div = document.createElement('div');
+            div.className = 'notif anuncio';
+            div.textContent = '📢 Anuncio MPA';
+            lista.appendChild(div);
+            contador++;
+            actualizarContador();
+        }
+        
+        function agregarAviso() {
+            const lista = document.getElementById('lista');
+            const div = document.createElement('div');
+            div.className = 'notif aviso';
+            div.textContent = '⚠️ Aviso MPA';
+            lista.appendChild(div);
+            contador++;
+            actualizarContador();
+        }
+        
+        // Para probar - eliminar después
+        document.addEventListener('keydown', function(e) {
+            if (e.key === '1') agregarAnuncio();
+            if (e.key === '2') agregarAviso();
+        });
+        
+        // Inicializar
+        actualizarContador();
+        
+        // Cerrar al hacer clic fuera
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.campana') && !e.target.closest('.panel')) {
+                document.getElementById('panel').style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
