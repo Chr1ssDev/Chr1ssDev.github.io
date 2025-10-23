@@ -1,0 +1,386 @@
+/* Reset y configuración base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    background: 
+        linear-gradient(135deg, rgba(76, 124, 90, 0.95), rgba(123, 104, 238, 0.9)),
+        url('../imagenes/parroquia-sanjose.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    color: #2c3e30;
+}
+
+/* Contenedor principal del login */
+.login-container {
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.15),
+        0 8px 32px rgba(76, 124, 90, 0.2);
+    padding: 3rem 2.5rem;
+    width: 100%;
+    max-width: 420px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Decoración superior */
+.login-container::before {
+    content: '✠';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2.5rem;
+    color: #7b68ee;
+    background: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(123, 104, 238, 0.3);
+    border: 3px solid #e6b800;
+}
+
+/* Header del login */
+.login-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    margin-top: 1rem;
+}
+
+.login-header h2 {
+    font-size: 1.8rem;
+    color: #2c3e30;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+}
+
+.login-header p {
+    color: #4a7c5a;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+/* Formulario */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Grupos de input */
+.input-group {
+    position: relative;
+}
+
+.input-group label {
+    display: block;
+    font-weight: 600;
+    color: #2c3e30;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    letter-spacing: 0.02em;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    border: 2px solid #e1f0e3;
+    border-radius: 12px;
+    font-size: 1rem;
+    background: #ffffff;
+    color: #2c3e30;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: #4a7c5a;
+    box-shadow: 
+        0 0 0 3px rgba(74, 124, 90, 0.1),
+        0 4px 12px rgba(74, 124, 90, 0.15);
+    transform: translateY(-1px);
+}
+
+.input-group input::placeholder {
+    color: #9ca3af;
+    font-weight: 400;
+}
+
+/* Botón de acceso */
+.login-button {
+    background: linear-gradient(135deg, #4a7c5a, #5d9970);
+    color: white;
+    border: none;
+    padding: 1.2rem 2rem;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 0.5rem;
+    box-shadow: 
+        0 4px 16px rgba(74, 124, 90, 0.3),
+        0 1px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.login-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s ease;
+}
+
+.login-button:hover {
+    background: linear-gradient(135deg, #5d9970, #4a7c5a);
+    transform: translateY(-2px);
+    box-shadow: 
+        0 8px 24px rgba(74, 124, 90, 0.4),
+        0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.login-button:hover::before {
+    left: 100%;
+}
+
+.login-button:active {
+    transform: translateY(0);
+}
+
+.login-button:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Información de intentos */
+.attempts-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(135deg, #f8fffe, #f1f8f6);
+    padding: 1rem;
+    border-radius: 10px;
+    border: 1px solid rgba(74, 124, 90, 0.1);
+    font-size: 0.9rem;
+}
+
+.attempts-label {
+    color: #4a7c5a;
+    font-weight: 600;
+}
+
+.attempts-count {
+    background: #4a7c5a;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+
+/* Mensajes de error/éxito */
+.message {
+    padding: 1rem;
+    border-radius: 10px;
+    font-weight: 600;
+    text-align: center;
+    margin-top: 1rem;
+    animation: slideIn 0.3s ease-out;
+}
+
+.message.error {
+    background: linear-gradient(135deg, #fef2f2, #fee2e2);
+    color: #dc2626;
+    border: 1px solid #fecaca;
+}
+
+.message.success {
+    background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+    color: #16a34a;
+    border: 1px solid #bbf7d0;
+}
+
+/* Enlaces adicionales */
+.additional-links {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(74, 124, 90, 0.1);
+}
+
+.link {
+    color: #7b68ee;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    display: inline-block;
+    margin: 0.25rem;
+}
+
+.link:hover {
+    background: rgba(123, 104, 238, 0.1);
+    transform: translateY(-1px);
+}
+
+.link:focus {
+    outline: 2px solid #7b68ee;
+    outline-offset: 2px;
+}
+
+/* Elementos decorativos sutiles */
+.floating-element {
+    position: fixed;
+    font-size: 1.2rem;
+    opacity: 0.03;
+    animation: gentleFloat 15s ease-in-out infinite;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.floating-element:nth-child(1) {
+    top: 15%;
+    left: 10%;
+    animation-delay: 0s;
+}
+
+.floating-element:nth-child(2) {
+    top: 70%;
+    right: 15%;
+    animation-delay: 5s;
+}
+
+.floating-element:nth-child(3) {
+    bottom: 20%;
+    left: 20%;
+    animation-delay: 10s;
+}
+
+/* Animaciones */
+@keyframes gentleFloat {
+    0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-15px) rotate(2deg);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Aplicar animación de entrada */
+.login-container {
+    animation: fadeInUp 0.8s ease-out;
+}
+
+/* Responsividad */
+@media (max-width: 480px) {
+    body {
+        padding: 0.5rem;
+    }
+    
+    .login-container {
+        padding: 2rem 1.5rem;
+        border-radius: 16px;
+    }
+    
+    .login-container::before {
+        font-size: 2rem;
+        width: 50px;
+        height: 50px;
+    }
+    
+    .login-header h2 {
+        font-size: 1.6rem;
+    }
+    
+    .input-group input {
+        padding: 1rem;
+        font-size: 16px; /* Evita zoom en iOS */
+    }
+    
+    .login-button {
+        padding: 1rem 1.5rem;
+        font-size: 1rem;
+    }
+}
+
+/* Estados de accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Tema oscuro (si el usuario lo prefiere) */
+@media (prefers-color-scheme: dark) {
+    .login-container {
+        background: rgba(30, 41, 59, 0.95);
+        color: #f1f5f9;
+    }
+    
+    .login-header h2 {
+        color: #f1f5f9;
+    }
+    
+    .input-group input {
+        background: rgba(51, 65, 85, 0.8);
+        border-color: #475569;
+        color: #f1f5f9;
+    }
+    
+    .input-group input:focus {
+        border-color: #7b68ee;
+    }
+}

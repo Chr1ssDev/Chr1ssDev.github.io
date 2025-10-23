@@ -1,0 +1,333 @@
+/* Reset y configuración base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #2d5a3d 0%, #4a7c59 50%, #2d5a3d 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Elementos decorativos de fondo */
+body::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: 
+        radial-gradient(circle at 20% 20%, rgba(138, 43, 226, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 60%, rgba(138, 43, 226, 0.05) 0%, transparent 50%);
+    animation: floating 20s ease-in-out infinite;
+    z-index: -2;
+}
+
+/* Patrón de cruz sutil en el fondo */
+body::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        linear-gradient(45deg, transparent 45%, rgba(255, 255, 255, 0.02) 50%, transparent 55%),
+        linear-gradient(-45deg, transparent 45%, rgba(255, 255, 255, 0.02) 50%, transparent 55%);
+    background-size: 60px 60px;
+    z-index: -1;
+}
+
+/* Contenedor principal */
+main {
+    text-align: center;
+    max-width: 800px;
+    padding: 3rem 2rem;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.1),
+        0 0 0 1px rgba(138, 43, 226, 0.1);
+    color: #2d5a3d;
+    position: relative;
+    backdrop-filter: blur(10px);
+    transform: translateY(0);
+    animation: slideIn 1s ease-out;
+}
+
+/* Título principal */
+h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, #2d5a3d 0%, #4a7c59 50%, #2d5a3d 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: relative;
+    animation: titleGlow 3s ease-in-out infinite alternate;
+}
+
+/* Cruz decorativa en el título */
+h1::before {
+    content: '✠';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.2rem;
+    color: #8a2be2;
+    animation: crossFloat 4s ease-in-out infinite;
+}
+
+/* Párrafos */
+p {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+    color: #2d5a3d;
+    opacity: 0;
+    animation: fadeInUp 1s ease-out 0.5s forwards;
+}
+
+p:last-of-type {
+    font-weight: 600;
+    font-size: 1.3rem;
+    margin-bottom: 2rem;
+    animation-delay: 1s;
+}
+
+/* Enlace principal */
+a {
+    display: inline-block;
+    padding: 1rem 2.5rem;
+    background: linear-gradient(135deg, #2d5a3d 0%, #4a7c59 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    box-shadow: 
+        0 8px 25px rgba(45, 90, 61, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    opacity: 0;
+    animation: fadeInUp 1s ease-out 1.5s forwards;
+}
+
+/* Efectos decorativos del enlace */
+a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.2), transparent);
+    transition: left 0.6s ease;
+}
+
+a::after {
+    content: '→';
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: transform 0.3s ease;
+    color: #ffd700;
+}
+
+/* Estados hover del enlace */
+a:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 
+        0 15px 35px rgba(45, 90, 61, 0.4),
+        0 0 20px rgba(138, 43, 226, 0.2);
+    border-color: #8a2be2;
+}
+
+a:hover::before {
+    left: 100%;
+}
+
+a:hover::after {
+    transform: translateY(-50%) translateX(5px);
+}
+
+/* Estados activos */
+a:active {
+    transform: translateY(-1px) scale(1.02);
+}
+
+/* Elementos decorativos flotantes */
+.decorative-element {
+    position: absolute;
+    opacity: 0.1;
+    animation: float 6s ease-in-out infinite;
+}
+
+.decorative-element:nth-child(1) {
+    top: 10%;
+    left: 10%;
+    color: #8a2be2;
+    font-size: 2rem;
+    animation-delay: 0s;
+}
+
+.decorative-element:nth-child(2) {
+    top: 20%;
+    right: 15%;
+    color: #ffd700;
+    font-size: 1.5rem;
+    animation-delay: 2s;
+}
+
+.decorative-element:nth-child(3) {
+    bottom: 15%;
+    left: 20%;
+    color: #8a2be2;
+    font-size: 1.8rem;
+    animation-delay: 4s;
+}
+
+/* Animaciones */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes titleGlow {
+    0% {
+        text-shadow: 0 0 10px rgba(45, 90, 61, 0.3);
+    }
+    100% {
+        text-shadow: 0 0 20px rgba(45, 90, 61, 0.6);
+    }
+}
+
+@keyframes crossFloat {
+    0%, 100% {
+        transform: translateX(-50%) translateY(0);
+    }
+    50% {
+        transform: translateX(-50%) translateY(-5px);
+    }
+}
+
+@keyframes floating {
+    0%, 100% {
+        transform: rotate(0deg);
+    }
+    50% {
+        transform: rotate(1deg);
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-10px) rotate(5deg);
+    }
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+    main {
+        margin: 1rem;
+        padding: 2rem 1.5rem;
+    }
+    
+    h1 {
+        font-size: 2rem;
+    }
+    
+    p {
+        font-size: 1.1rem;
+    }
+    
+    a {
+        padding: 0.8rem 2rem;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    p {
+        font-size: 1rem;
+    }
+    
+    a {
+        padding: 0.7rem 1.5rem;
+    }
+}
+
+/* Efectos de accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Estados de foco para accesibilidad */
+a:focus {
+    outline: 3px solid #ffd700;
+    outline-offset: 2px;
+}
+
+/* Efecto de pulso sutil en el contenedor principal */
+main {
+    animation: slideIn 1s ease-out, subtlePulse 8s ease-in-out infinite 2s;
+}
+
+@keyframes subtlePulse {
+    0%, 100% {
+        box-shadow: 
+            0 20px 40px rgba(0, 0, 0, 0.1),
+            0 0 0 1px rgba(138, 43, 226, 0.1);
+    }
+    50% {
+        box-shadow: 
+            0 25px 50px rgba(0, 0, 0, 0.15),
+            0 0 0 1px rgba(138, 43, 226, 0.2);
+    }
+}

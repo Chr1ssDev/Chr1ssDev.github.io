@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publicaciones - MPA San José</title>
+    <link rel="stylesheet" href="publicaciones.css">
+</head>
+<body>
+    <!-- Elementos decorativos flotantes -->
+    <div class="floating-decoration">✠</div>
+    <div class="floating-decoration">✟</div>
+    <div class="floating-decoration">⛪</div>
+    
+    <div class="container">
+        <!-- Header principal -->
+        <div class="main-header">
+            <h1>Publicaciones y Anuncios</h1>
+            <p>Mantente informado sobre las actividades del Movimiento Pandillas de la Amistad</p>
+        </div>
+
+        <!-- Barra de herramientas -->
+        <div class="toolbar">
+            <h2>🔍 Filtrar publicaciones:</h2>
+            <div class="toolbar-section">
+                <button class="filter-btn active" onclick="filtrarAnuncios('todos')">
+                    📋 Todos
+                </button>
+                <button class="filter-btn" onclick="filtrarAnuncios('anuncio')">
+                    📢 Anuncios
+                </button>
+                <button class="filter-btn" onclick="filtrarAnuncios('aviso')">
+                    ⚠️ Avisos
+                </button>
+                <button class="filter-btn" onclick="filtrarAnuncios('noticia')">
+                    📰 Noticias
+                </button>
+                <button class="filter-btn refresh" onclick="location.reload()">
+                    🔄 Actualizar
+                </button>
+            </div>
+        </div>
+
+        <!-- Contador de publicaciones -->
+        <div class="publication-counter" id="publicationCounter">
+            📊 Total de publicaciones: <span id="totalCount">0</span>
+        </div>
+
+        <!-- Contenedor de publicaciones -->
+        <div class="publications-container">
+            <div id="publicaciones"></div>
+        </div>
+    </div>
+
+    <script>
+        let todasLasPublicaciones = [];
+        
+        function cargarPublicaciones() {
+            todasLasPublicaciones = JSON.parse(localStorage.getItem('anuncios')) || [];
+            mostrarPublicaciones(todasLasPublicaciones);
+            actualizarContador(todasLasPublicaciones.length);
+        }
+        
+        function mostrarPublicaciones(publicaciones) {
+            const contenedor = document.getElementById('publicaciones');
+            
+            if (publicaciones.length === 0) {
+                contenedor.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📭</div>
+                        <h3>No hay publicaciones disponibles</h3>
+                        <p>Aún no se han publicado anuncios. Vuelve más tarde para ver las últimas novedades del MPA.</p>
+                        <a href="index.html" class="empty-state-btn">
+                            🏠 Ir al inicio
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Ordenar por más recientes primero
+            publicaciones.sort((a, b) => b.id - a.id);
+            
+            let html = '';
+            publicaciones.forEach((publicacion, index) => {
+                html += `
+                    <div class="publication-card" data-type="${publicacion.tipo}" style="animation-delay: ${index * 0.1}s">
+                        <div class="publication-header">
+                            <div class="publication-icon">
+                                ${getEmoji(publicacion.tipo)}
+                            </div>
+                            <div class="publication-title-section">
+                                <h3 class="publication-title">${publicacion.titulo}</h3>
+                                <div class="publication-meta">
+                                    <div class="meta-item">
+                                        <span>👤</span>
+                                        <strong>Autor:</strong> ${publicacion.autor}
+                                    </div>
+                                    <div class="meta-item">
+                                        <span>📅</span>
+                                        <strong>Fecha:</strong> ${publicacion.fecha}
+                                    </div>
+                                    <div class="meta-item">
+                                        <span>🏷️</span>
+                                        <strong>Tipo:</strong> ${capitalize(publicacion.tipo)}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="publication-content">
+                            ${publicacion.contenido}
+                        </div>
+                        
+                        ${publicacion.archivo ? `
+                            <div class="publication-file">
+                                <div class="file-info">
+                                    <div class="file-icon">📎</div>
+                                    <div>
+                                        <strong>Archivo adjunto:</strong><br>
+                                        <span>${publicacion.archivo.nombre}</span>
+                                    </div>
+                                </div>
+                                <button class="download-btn" onclick="descargarArchivo(${publicacion.id})">
+                                    💾 Descargar
+                                </button>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            });
+            
+            contenedor.innerHTML = html;
+        }
+        
+        function filtrarAnuncios(tipo) {
+            // Actualizar botones activos
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            let publicacionesFiltradas;
+            if (tipo === 'todos') {
+                publicacionesFiltradas = todasLasPublicaciones;
+            } else {
+                publicacionesFiltradas = todasLasPublicaciones.filter(pub => pub.tipo === tipo);
+            }
+            
+            mostrarPublicaciones(publicacionesFiltradas);
+            actualizarContador(publicacionesFiltradas.length, tipo);
+        }
+
+        function getEmoji(tipo) {
+            switch(tipo) {
+                case 'anuncio': return '📢';
+                case 'aviso': return '⚠️';
+                case 'noticia': return '📰';
+                default: return '📝';
+            }
+        }
+        
+        function capitalize(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+        
+        function actualizarContador(cantidad, filtro = 'todas') {
+            const contador = document.getElementById('totalCount');
+            const label = filtro === 'todas' ? 'publicaciones' : `${filtro}s`;
+            contador.textContent = cantidad;
+            
+            const counterContainer = document.getElementById('publicationCounter');
+            if (filtro !== 'todas') {
+                counterContainer.innerHTML = `📊 Total de ${label}: <span id="totalCount">${cantidad}</span>`;
+            } else {
+                counterContainer.innerHTML = `📊 Total de publicaciones: <span id="totalCount">${cantidad}</span>`;
+            }
+        }
+        
+        function descargarArchivo(idPublicacion) {
+            const publicacion = todasLasPublicaciones.find(p => p.id === idPublicacion);
+            if (publicacion && publicacion.archivo) {
+                const link = document.createElement('a');
+                link.href = publicacion.archivo.contenido;
+                link.download = publicacion.archivo.nombre;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                // Feedback visual
+                const btn = event.target;
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '✅ Descargando...';
+                btn.disabled = true;
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }, 2000);
+            }
+        }
+        
+        // Cargar publicaciones al iniciar
+        window.onload = function() {
+            cargarPublicaciones();
+        };
+        
+        // Auto-actualizar cada 30 segundos (opcional)
+        setInterval(() => {
+            const nuevasPublicaciones = JSON.parse(localStorage.getItem('anuncios')) || [];
+            if (nuevasPublicaciones.length !== todasLasPublicaciones.length) {
+                cargarPublicaciones();
+            }
+        }, 30000);
+    </script>
+</body>
+</html>

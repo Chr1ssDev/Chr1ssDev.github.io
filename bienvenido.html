@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Control - MPA San José</title>
+    <link rel="stylesheet" href="bienvenido.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header principal -->
+        <div class="main-header">
+            <h1>¡Bienvenido!</h1>
+            <p class="welcome-user">Usuario: <span id="usuarioActual"></span></p>
+        </div>
+
+        <!-- Navegación de pestañas -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="mostrarSeccion('ver')">
+                👀 Ver Anuncios
+            </button>
+            <button class="nav-tab" onclick="mostrarSeccion('crear')">
+                📝 Crear Anuncio
+            </button>
+            <button class="nav-tab" onclick="mostrarSeccion('mis')">
+                📋 Mis Anuncios
+            </button>
+            <button class="nav-tab logout" onclick="cerrarSesion()">
+                🚪 Cerrar Sesión
+            </button>
+        </div>
+
+        <!-- SECCIÓN: VER ANUNCIOS -->
+        <div id="seccionVer" class="content-section active">
+            <h2>👀 Anuncios y Avisos</h2>
+            
+            <div class="filter-buttons">
+                <button class="filter-btn active" onclick="filtrarAnuncios('todos')">Todos</button>
+                <button class="filter-btn" onclick="filtrarAnuncios('anuncio')">📢 Anuncios</button>
+                <button class="filter-btn" onclick="filtrarAnuncios('aviso')">⚠️ Avisos</button>
+                <button class="filter-btn" onclick="filtrarAnuncios('noticia')">📰 Noticias</button>
+                <button class="filter-btn refresh" onclick="location.reload()">🔄 Actualizar</button>
+            </div>
+            
+            <div id="anunciosPublicos"></div>
+        </div>
+
+        <!-- SECCIÓN: CREAR ANUNCIO -->
+        <div id="seccionCrear" class="content-section">
+            <h2>📝 Crear Nuevo Anuncio</h2>
+            
+            <form id="formCrearAnuncio">
+                <div class="form-group">
+                    <label for="tipoAnuncio">Tipo de publicación:</label>
+                    <select id="tipoAnuncio">
+                        <option value="anuncio">📢 Anuncio</option>
+                        <option value="aviso">⚠️ Aviso Importante</option>
+                        <option value="noticia">📰 Noticia</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="tituloAnuncio">Título:</label>
+                    <input type="text" id="tituloAnuncio" placeholder="Título del anuncio" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="contenidoAnuncio">Contenido:</label>
+                    <textarea id="contenidoAnuncio" placeholder="Escribe el contenido aquí..." required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="archivoAnuncio">Subir Archivo (opcional):</label>
+                    <input type="file" id="archivoAnuncio" accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.txt">
+                </div>
+                
+                <button type="button" class="btn-primary" onclick="crearAnuncio()">
+                    ✅ Publicar Anuncio
+                </button>
+                
+                <div id="mensajeCrear"></div>
+            </form>
+        </div>
+
+        <!-- SECCIÓN: MIS ANUNCIOS -->
+        <div id="seccionMis" class="content-section">
+            <h2>📋 Mis Anuncios Publicados</h2>
+            <div id="misAnuncios"></div>
+        </div>
+    </div>
+
+    <script>
+        const usuarioLogueado = localStorage.getItem('usuarioLogueado');
+        let todosLosAnuncios = [];
+        
+        if (!usuarioLogueado) {
+            alert('Debes iniciar sesión primero');
+            window.location.href = 'login.html';
+        } else {
+            document.getElementById('usuarioActual').textContent = usuarioLogueado;
+        }
+
+        function mostrarSeccion(seccion) {
+            // Remover active de todas las secciones y tabs
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            
+            // Activar la sección seleccionada
+            document.getElementById('seccion' + seccion.charAt(0).toUpperCase() + seccion.slice(1)).classList.add('active');
+            
+            // Activar el tab correspondiente
+            event.target.classList.add('active');
+            
+            // Cargar contenido según la sección
+            switch(seccion) {
+                case 'ver':
+                    cargarAnunciosPublicos();
+                    break;
+                case 'mis':
+                    cargarMisAnuncios();
+                    break;
+            }
+        }
+        
+        function cerrarSesion() {
+            if (confirm('¿Estás seguro de cerrar sesión?')) {
+                localStorage.removeItem('usuarioLogueado');
+                window.location.href = 'login.html';
+            }
+        }
+
+        function crearAnuncio() {
+            const tipo = document.getElementById('tipoAnuncio').value;
+            const titulo = document.getElementById('tituloAnuncio').value;
+            const contenido = document.getElementById('contenidoAnuncio').value;
+            const archivo = document.getElementById('archivoAnuncio').files[0];
+            const mensaje = document.getElementById('mensajeCrear');
+            
+            if (!titulo.trim()) {
+                mostrarMensaje('mensajeCrear', 'El título es obligatorio', 'error');
+                return;
+            }
+            
+            if (!contenido.trim()) {
+                mostrarMensaje('mensajeCrear', 'El contenido es obligatorio', 'error');
+                return;
+            }
+            
+            const anuncio = {
+                id: Date.now(),
+                tipo: tipo,
+                titulo: titulo.trim(),
+                contenido: contenido.trim(),
+                autor: usuarioLogueado,
+                fecha: new Date().toLocaleDateString('es-ES'),
+                archivo: null
+            };
+            
+            if (archivo) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    anuncio.archivo = {
+                        nombre: archivo.name,
+                        tipo: archivo.type,
+                        tamaño: archivo.size,
+                        contenido: e.target.result
+                    };
+                    guardarAnuncio(anuncio);
+                };
+                reader.readAsDataURL(archivo);
+            } else {
+                guardarAnuncio(anuncio);
+            }
+        }
+        
+        function guardarAnuncio(anuncio) {
+            let anuncios = JSON.parse(localStorage.getItem('anuncios')) || [];
+            anuncios.push(anuncio);
+            localStorage.setItem('anuncios', JSON.stringify(anuncios));
+            
+            mostrarMensaje('mensajeCrear', '✅ Anuncio publicado exitosamente', 'success');
+            
+            // Limpiar formulario
+            document.getElementById('formCrearAnuncio').reset();
+        }
+
+        function cargarAnunciosPublicos() {
+            todosLosAnuncios = JSON.parse(localStorage.getItem('anuncios')) || [];
+            mostrarAnunciosPublicos(todosLosAnuncios);
+        }
+        
+        function mostrarAnunciosPublicos(anuncios) {
+            const contenedor = document.getElementById('anunciosPublicos');
+            
+            if (anuncios.length === 0) {
+                contenedor.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📭</div>
+                        <h3>No hay anuncios publicados</h3>
+                        <p>Sé el primero en crear un anuncio</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            anuncios.sort((a, b) => b.id - a.id);
+            
+            let html = '';
+            anuncios.forEach(anuncio => {
+                html += `
+                    <div class="announcement-card">
+                        <div class="announcement-header">
+                            <span>${getEmojiTipo(anuncio.tipo)}</span>
+                            <h3 class="announcement-title">${anuncio.titulo}</h3>
+                        </div>
+                        <div class="announcement-meta">
+                            <span><strong>Publicado por:</strong> ${anuncio.autor}</span>
+                            <span><strong>Fecha:</strong> ${anuncio.fecha}</span>
+                            <span><strong>Tipo:</strong> ${anuncio.tipo}</span>
+                        </div>
+                        <div class="announcement-content">
+                            ${anuncio.contenido}
+                        </div>
+                        ${anuncio.archivo ? `
+                            <div class="announcement-file">
+                                <span>📎 <strong>Archivo adjunto:</strong> ${anuncio.archivo.nombre}</span>
+                                <button class="download-btn" onclick="descargarArchivo(${anuncio.id})">
+                                    💾 Descargar
+                                </button>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            });
+            
+            contenedor.innerHTML = html;
+        }
+        
+        function filtrarAnuncios(tipo) {
+            // Actualizar botones activos
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (tipo === 'todos') {
+                mostrarAnunciosPublicos(todosLosAnuncios);
+            } else {
+                const anunciosFiltrados = todosLosAnuncios.filter(anuncio => anuncio.tipo === tipo);
+                mostrarAnunciosPublicos(anunciosFiltrados);
+            }
+        }
+
+        function cargarMisAnuncios() {
+            const anuncios = JSON.parse(localStorage.getItem('anuncios')) || [];
+            const misAnuncios = anuncios.filter(anuncio => anuncio.autor === usuarioLogueado);
+            const contenedor = document.getElementById('misAnuncios');
+            
+            if (misAnuncios.length === 0) {
+                contenedor.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📝</div>
+                        <h3>No has publicado anuncios aún</h3>
+                        <p>Crea tu primer anuncio desde la pestaña "Crear Anuncio"</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            misAnuncios.forEach(anuncio => {
+                html += `
+                    <div class="announcement-card">
+                        <div class="announcement-header">
+                            <span>${getEmojiTipo(anuncio.tipo)}</span>
+                            <h3 class="announcement-title">${anuncio.titulo}</h3>
+                        </div>
+                        <div class="announcement-meta">
+                            <span><strong>Fecha:</strong> ${anuncio.fecha}</span>
+                            <span><strong>Tipo:</strong> ${anuncio.tipo}</span>
+                        </div>
+                        <div class="announcement-content">
+                            ${anuncio.contenido}
+                        </div>
+                        ${anuncio.archivo ? `
+                            <div class="announcement-file">
+                                <span>📎 <strong>Archivo:</strong> ${anuncio.archivo.nombre}</span>
+                            </div>
+                        ` : ''}
+                        <button class="delete-btn" onclick="eliminarAnuncio(${anuncio.id})">
+                            🗑️ Eliminar
+                        </button>
+                    </div>
+                `;
+            });
+            
+            contenedor.innerHTML = html;
+        }
+        
+        function eliminarAnuncio(id) {
+            if (confirm('¿Estás seguro de eliminar este anuncio?')) {
+                let anuncios = JSON.parse(localStorage.getItem('anuncios')) || [];
+                anuncios = anuncios.filter(anuncio => anuncio.id !== id);
+                localStorage.setItem('anuncios', JSON.stringify(anuncios));
+                cargarMisAnuncios();
+                // Mostrar mensaje de éxito
+                const mensaje = document.createElement('div');
+                mensaje.className = 'status-message success';
+                mensaje.textContent = '✅ Anuncio eliminado exitosamente';
+                document.getElementById('seccionMis').insertBefore(mensaje, document.getElementById('misAnuncios'));
+                setTimeout(() => mensaje.remove(), 3000);
+            }
+        }
+
+        function getEmojiTipo(tipo) {
+            switch(tipo) {
+                case 'anuncio': return '📢';
+                case 'aviso': return '⚠️';
+                case 'noticia': return '📰';
+                default: return '📝';
+            }
+        }
+        
+        function descargarArchivo(idAnuncio) {
+            const anuncio = todosLosAnuncios.find(a => a.id === idAnuncio);
+            if (anuncio && anuncio.archivo) {
+                const link = document.createElement('a');
+                link.href = anuncio.archivo.contenido;
+                link.download = anuncio.archivo.nombre;
+                link.click();
+            }
+        }
+        
+        function mostrarMensaje(contenedorId, texto, tipo) {
+            const contenedor = document.getElementById(contenedorId);
+            contenedor.innerHTML = `<div class="status-message ${tipo}">${texto}</div>`;
+            setTimeout(() => {
+                contenedor.innerHTML = '';
+            }, 5000);
+        }
+        
+        // Inicializar
+        window.onload = function() {
+            cargarAnunciosPublicos();
+        };
+    </script>
+</body>
+</html>

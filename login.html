@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Login - MPA San José</title>
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+    <!-- Elementos decorativos flotantes -->
+    <div class="floating-element">✠</div>
+    <div class="floating-element">✟</div>
+    <div class="floating-element">⛪</div>
+    
+    <div class="login-container">
+        <div class="login-header">
+            <h2>Sistema de Acceso</h2>
+            <p>Movimiento Pandillas de la Amistad</p>
+        </div>
+        
+        <form class="login-form">
+            <div class="input-group">
+                <label for="username">Usuario:</label>
+                <input type="text" id="username" placeholder="Nombre de usuario" autocomplete="username">
+            </div>
+            
+            <div class="input-group">
+                <label for="password">Contraseña (8 caracteres):</label>
+                <input type="password" id="password" placeholder="8 caracteres" autocomplete="current-password">
+            </div>
+            
+            <div class="attempts-info">
+                <span class="attempts-label">Intentos restantes:</span>
+                <span class="attempts-count" id="attempts">3</span>
+            </div>
+            
+            <button type="button" class="login-button" onclick="login()">
+                Acceder
+            </button>
+            
+            <div id="message"></div>
+        </form>
+        
+        <div class="additional-links">
+            <a href="index.html" class="link">← Volver al inicio</a>
+            <a href="publicaciones.html" class="link">Ver publicaciones</a>
+        </div>
+    </div>
+
+    <script>
+        const users = {
+            "Tia Jazz": "96221704",
+            "Mami Makio": "81120364",
+            "Tio Juanjo": "74045126",
+            "Mami Mar": "55672390",
+            "Emir Andrés": "34621073",
+            "Alexis Villegas": "77391072",
+            "Violeta": "67261093",
+            "Ivanna": "18739270",
+            "Leo": "11937462",
+            "Raúl": "71922830",
+            "ChrissAdmin": "08022012"
+        };
+        
+        let attemptsLeft = 3;
+        
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const messageDiv = document.getElementById('message');
+            const button = document.querySelector('.login-button');
+            
+            if (password.length !== 8) {
+                showMessage('La contraseña debe tener exactamente 8 caracteres', 'error');
+                return;
+            }
+            
+            if (users[username] && users[username] === password) {
+                localStorage.setItem('usuarioLogueado', username);
+                showMessage('✅ Acceso concedido. Redirigiendo...', 'success');
+                button.disabled = true;
+                button.textContent = 'Redirigiendo...';
+                
+                setTimeout(() => {
+                    window.location.href = 'bienvenido.html';
+                }, 1500);
+            } else {
+                attemptsLeft--;
+                document.getElementById('attempts').textContent = attemptsLeft;
+                
+                if (attemptsLeft > 0) {
+                    showMessage(`❌ Credenciales incorrectas. Intentos restantes: ${attemptsLeft}`, 'error');
+                    document.getElementById('username').value = '';
+                    document.getElementById('password').value = '';
+                    document.getElementById('username').focus();
+                } else {
+                    showMessage('🚫 Sistema bloqueado. Demasiados intentos fallidos.', 'error');
+                    document.getElementById('username').disabled = true;
+                    document.getElementById('password').disabled = true;
+                    button.disabled = true;
+                    button.textContent = 'Bloqueado';
+                    
+                    setTimeout(() => {
+                        if (confirm('Sistema bloqueado. ¿Reiniciar?')) {
+                            location.reload();
+                        }
+                    }, 2000);
+                }
+            }
+        }
+        
+        function showMessage(text, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.innerHTML = `<div class="message ${type}">${text}</div>`;
+        }
+        
+        // Enter para enviar
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                login();
+            }
+        });
+        
+        // Enfocar campo usuario al cargar
+        window.onload = function() {
+            document.getElementById('username').focus();
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,377 @@
+/* Reset y configuración base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    background: 
+        linear-gradient(135deg, rgba(247, 251, 248, 0.95), rgba(240, 248, 242, 0.9)),
+        url('imagenes/parroquia-sanjose.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    line-height: 1.7;
+    color: #2c5530;
+    padding: 2rem 0;
+    min-height: 100vh;
+}
+
+/* Contenedor principal */
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    box-shadow: 
+        0 15px 35px rgba(0, 0, 0, 0.1),
+        0 5px 15px rgba(44, 85, 48, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(138, 43, 226, 0.1);
+}
+
+/* Títulos principales */
+h1 {
+    font-size: 2.2rem;
+    color: #2c5530;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, #2c5530, #4a7c59, #2c5530);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: relative;
+    padding-bottom: 1rem;
+}
+
+h1::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, #8a2be2, #ffd700, #8a2be2);
+    border-radius: 2px;
+}
+
+/* Títulos secundarios */
+h2 {
+    font-size: 1.8rem;
+    color: #2c5530;
+    margin: 2.5rem 0 1rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e8f5e8;
+    position: relative;
+}
+
+h2::before {
+    content: '✟';
+    color: #8a2be2;
+    margin-right: 0.5rem;
+    font-size: 1.2rem;
+}
+
+/* Títulos terciarios */
+h3 {
+    font-size: 1.4rem;
+    color: #2c5530;
+    margin: 2rem 0 1rem 0;
+    font-weight: 600;
+}
+
+h4 {
+    font-size: 1.2rem;
+    color: #4a7c59;
+    margin: 1.5rem 0 0.8rem 0;
+    font-weight: 600;
+}
+
+/* Párrafos */
+p {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    color: #2c5530;
+    text-align: justify;
+    text-indent: 1.5rem;
+}
+
+/* Texto en negrita */
+b, strong {
+    color: #1e3a22;
+    font-weight: 700;
+}
+
+/* Imágenes */
+img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin: 1.5rem 0;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border: 3px solid #f8f9fa;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+img:hover {
+    transform: scale(1.02);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+}
+
+/* Imágenes específicas */
+img[alt="fundador de MPA"] {
+    float: right;
+    width: 200px;
+    margin: 0 0 1rem 2rem;
+    border: 3px solid #8a2be2;
+}
+
+img[alt="Logo de MPA y lema"] {
+    display: block;
+    margin: 1.5rem auto;
+    width: 250px;
+    border: 3px solid #ffd700;
+}
+
+/* Listas */
+ul {
+    margin: 1rem 0 1.5rem 2rem;
+    color: #2c5530;
+}
+
+li {
+    margin-bottom: 0.8rem;
+    font-size: 1.1rem;
+    position: relative;
+    padding-left: 1rem;
+}
+
+li::before {
+    content: '✓';
+    position: absolute;
+    left: -0.5rem;
+    color: #4a7c59;
+    font-weight: bold;
+}
+
+/* Enlaces */
+a {
+    color: #4a7c59;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 0.3rem 0.6rem;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    display: inline-block;
+    margin: 0.2rem;
+    border: 1px solid transparent;
+}
+
+a:hover {
+    background: linear-gradient(135deg, #4a7c59, #2c5530);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(74, 124, 89, 0.3);
+    border-color: #8a2be2;
+}
+
+/* Enlaces especiales */
+a[href="pandilla.html"] {
+    background: linear-gradient(135deg, #8a2be2, #9966cc);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 25px;
+    font-size: 1.1rem;
+    margin: 1.5rem 0.5rem;
+    box-shadow: 0 8px 25px rgba(138, 43, 226, 0.3);
+    border: 2px solid #ffd700;
+}
+
+a[href="pandilla.html"]:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 12px 35px rgba(138, 43, 226, 0.4);
+    background: linear-gradient(135deg, #9966cc, #8a2be2);
+}
+
+a[href="publicaciones.html"] {
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    color: #2c5530;
+    padding: 0.8rem 1.5rem;
+    border-radius: 20px;
+    font-weight: 700;
+    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.3);
+    border: 2px solid #8a2be2;
+}
+
+a[href="publicaciones.html"]:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
+    background: linear-gradient(135deg, #ffed4e, #ffd700);
+}
+
+/* Secciones especiales */
+.lema-section {
+    background: linear-gradient(135deg, #f8f9fa, #e8f5e8);
+    padding: 2rem;
+    border-radius: 15px;
+    border-left: 5px solid #8a2be2;
+    margin: 2rem 0;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.mission-section {
+    background: linear-gradient(135deg, #e8f5e8, #f0f8f0);
+    padding: 1.5rem;
+    border-radius: 10px;
+    border: 1px solid #4a7c59;
+    margin: 1.5rem 0;
+}
+
+/* Elementos decorativos */
+.decorative-cross {
+    position: fixed;
+    font-size: 1.5rem;
+    color: rgba(138, 43, 226, 0.1);
+    animation: float 8s ease-in-out infinite;
+    z-index: -1;
+}
+
+.decorative-cross:nth-child(1) {
+    top: 15%;
+    left: 5%;
+    animation-delay: 0s;
+}
+
+.decorative-cross:nth-child(2) {
+    top: 40%;
+    right: 8%;
+    animation-delay: 3s;
+}
+
+.decorative-cross:nth-child(3) {
+    bottom: 25%;
+    left: 10%;
+    animation-delay: 6s;
+}
+
+/* Separadores */
+hr {
+    border: none;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #8a2be2, #ffd700, #8a2be2, transparent);
+    margin: 2rem 0;
+    border-radius: 1px;
+}
+
+/* Animaciones */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-15px) rotate(5deg);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Aplicar animación de entrada */
+.container {
+    animation: fadeIn 1s ease-out;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+    body {
+        padding: 1rem 0;
+    }
+    
+    .container {
+        margin: 0 1rem;
+        padding: 1.5rem;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+    }
+    
+    img[alt="fundador de MPA"] {
+        float: none;
+        width: 100%;
+        margin: 1rem 0;
+    }
+    
+    img[alt="Logo de MPA y lema"] {
+        width: 200px;
+    }
+    
+    p {
+        text-indent: 1rem;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.6rem;
+    }
+    
+    h2 {
+        font-size: 1.3rem;
+    }
+    
+    .lema-section, .mission-section {
+        padding: 1rem;
+    }
+    
+    a[href="pandilla.html"] {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+    }
+}
+
+/* Estados de accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Estados de foco */
+a:focus {
+    outline: 3px solid #ffd700;
+    outline-offset: 2px;
+}
+
+/* Efectos de entrada suaves */
+h1, h2, h3, p, img, ul {
+    opacity: 0;
+    animation: fadeIn 0.8s ease-out forwards;
+}
+
+h1 { animation-delay: 0.1s; }
+h2 { animation-delay: 0.2s; }
+p { animation-delay: 0.3s; }
+img { animation-delay: 0.4s; }
+ul { animation-delay: 0.5s; }
